@@ -14,13 +14,13 @@ import {
 } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { apiKeyInterceptor } from './core/interceptors/api-key.interceptor';
+import { apiInterceptor } from './core/interceptors/api.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withViewTransitions()),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withFetch(), withInterceptors([apiKeyInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([apiInterceptor])),
   ],
 };
