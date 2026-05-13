@@ -1,0 +1,24 @@
+<section class="catalog" id="top-rated-page">
+  <div class="catalog__header">
+    <h1 class="catalog__title">🏆 Mejor Valoradas</h1>
+    <p class="catalog__subtitle">Las películas mejor puntuadas de todos los tiempos</p>
+  </div>
+
+  <div class="movie-grid" id="top-rated-movies-grid">
+    @for (movie of movies(); track movie.id) {
+      <app-movie-card [movie]="movie" />
+    }
+  </div>
+
+  @if (currentPage() < totalPages()) {
+    <div class="catalog__load-more">
+      <button class="catalog__load-btn" (click)="loadMore()" [disabled]="isLoading()" id="top-rated-load-more">
+        @if (isLoading()) {
+          <span class="catalog__spinner"></span> Cargando...
+        } @else {
+          Cargar más películas
+        }
+      </button>
+    </div>
+  }
+</section>

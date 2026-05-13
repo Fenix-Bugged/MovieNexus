@@ -1,0 +1,24 @@
+<section class="search-page" id="search-page">
+  <div class="search-page__header">
+    <h1 class="search-page__title">Resultados para: <span class="search-page__query">"{{ query() }}"</span></h1>
+    <p class="search-page__count">{{ totalResults() }} resultados encontrados</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading">
+      <div class="loading__spinner"></div>
+    </div>
+  } @else if (results().length === 0) {
+    <div class="search-page__empty" id="search-empty">
+      <span class="search-page__empty-icon">🔍</span>
+      <h2>Sin resultados</h2>
+      <p>No encontramos películas con ese término. Intenta con otra búsqueda.</p>
+    </div>
+  } @else {
+    <div class="movie-grid" id="search-results-grid">
+      @for (movie of results(); track movie.id) {
+        <app-movie-card [movie]="movie" />
+      }
+    </div>
+  }
+</section>
