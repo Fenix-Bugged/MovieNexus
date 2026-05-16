@@ -1,29 +1,40 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MovieService } from '../../core/services/movie.service';
-import { Movie } from '../../core/models/movie.model';
 import { HeroComponent } from '../../shared/components/hero/hero';
+import { MovieSlider } from '../../shared/components/movie-slider/movie-slider';
+import { Movie } from '../../core/models/movie.model';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, HeroComponent],
+  imports: [CommonModule, HeroComponent, MovieSlider], // Agregamos MovieSlider a las importaciones
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
   private movieService = inject(MovieService);
-  movieHero: Movie | null = null;
+
+  // Declaramos nuestras Signals para almacenar el estado de forma reactiva
+  featuredMovie = signal<Movie | null>(null);
+  trendingMovies = signal<Movie[]>([]);
+  popularMovies = signal<Movie[]>([]);
 
   ngOnInit(): void {
+    // 1. Pedimos las tendencias
     this.movieService.getTrendingMovies().subscribe({
-      next: (response) => {
-        if (response.results && response.results.length > 0) {
-          this.movieHero = response.results[0];
+      next: (data) => {
+        if (data.results.length > 0) {
+          this.featuredMovie.set(data.results[0]); // Ponemos la #1 como Destacada
+          this.trendingMovies.set(data.results); // Guardamos la lista completa para el Slider
         }
-      },
-      error: (error) => {
-        console.error('Error al recibir datos:', error);
+      }
+    });
+
+    // 2. Pedimos las populares
+    this.movieService.getPopularMovies().subscribe({
+      next: (data) => {
+        this.popularMovies.set(data.results); // Guardamos la lista de populares
       }
     });
   }

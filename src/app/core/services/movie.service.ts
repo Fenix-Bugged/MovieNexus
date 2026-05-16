@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { MovieResponse } from '../models/movie.model';
 
 @Injectable({
@@ -13,5 +13,9 @@ export class MovieService {
 
   getTrendingMovies(): Observable<MovieResponse> {
     return this.http.get<MovieResponse>(`${this.apiUrl}/trending/movie/day`);
+  }
+
+  getPopularMovies(): Observable<MovieResponse> {
+    return this.http.get<MovieResponse>(`${this.apiUrl}/movie/popular`);
   }
 }
