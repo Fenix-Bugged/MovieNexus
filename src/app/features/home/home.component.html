@@ -1,14 +1,5 @@
-<section class="landing" id="landing-section">
-  <div class="landing__content">
-    <h1 class="landing__title" id="landing-title">
-      Bienvenido a <span class="landing__title-highlight">MovieNexus</span>
-    </h1>
-    <p class="landing__subtitle">
-      Explora las películas más populares, busca tus favoritas y mantente<br/>
-      al día con los últimos estrenos.
-    </p>
-    <button class="landing__cta" id="landing-cta">
-      Empezar a Explorar
-    </button>
-  </div>
-</section>
+@if (movieHero) {
+  <app-hero [movie]="movieHero"></app-hero>
+} @else {
+  <div class="skeleton-hero"></div>
+}
