@@ -2,7 +2,7 @@ import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
-import { provideRouter, withViewTransitions } from '@angular/router';
+import { provideRouter, withViewTransitions, withComponentInputBinding } from '@angular/router';
 import {
   provideClientHydration,
   withEventReplay,
@@ -19,7 +19,7 @@ import { apiInterceptor } from './core/interceptors/api.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withViewTransitions()),
+    provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(), withInterceptors([apiInterceptor])),
   ],

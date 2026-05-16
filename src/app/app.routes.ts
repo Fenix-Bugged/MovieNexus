@@ -7,11 +7,8 @@ export const routes: Routes = [
       import('./features/home/home.component').then((m) => m.HomeComponent),
   },
   {
-    path: 'movie/:id',
-    loadComponent: () =>
-      import('./features/movie-detail/movie-detail.component').then(
-        (m) => m.MovieDetailComponent,
-      ),
+    path: 'movie/:id', // :id es el parámetro dinámico
+    loadComponent: () => import('./features/movie-details/movie-details').then(m => m.MovieDetails)
   },
   {
     path: 'search',

@@ -18,4 +18,8 @@ export class MovieService {
   getPopularMovies(): Observable<MovieResponse> {
     return this.http.get<MovieResponse>(`${this.apiUrl}/movie/popular`);
   }
+
+  getMovieById(id: string | number) {
+    return this.http.get<Movie>(`${this.apiUrl}/movie/${id}`);
+  }
 }
