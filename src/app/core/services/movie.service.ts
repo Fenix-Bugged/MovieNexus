@@ -1,25 +1,28 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Movie, MovieResponse } from '../models/movie.model';
+import { MovieResponse, Movie } from '../models/movie.model';
+import { CreditsResponse } from '../models/cast.model'; // Importa el nuevo modelo
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class MovieService {
-  private apiUrl = environment.baseUrl;
   private http = inject(HttpClient);
+  private apiUrl = environment.baseUrl;
 
-  getTrendingMovies(): Observable<MovieResponse> {
+  getTrendingMovies() {
     return this.http.get<MovieResponse>(`${this.apiUrl}/trending/movie/day`);
   }
 
-  getPopularMovies(): Observable<MovieResponse> {
+  getPopularMovies() {
     return this.http.get<MovieResponse>(`${this.apiUrl}/movie/popular`);
   }
 
   getMovieById(id: string | number) {
     return this.http.get<Movie>(`${this.apiUrl}/movie/${id}`);
   }
+
+  getMovieCredits(id: string | number) {
+    return this.http.get<CreditsResponse>(`${this.apiUrl}/movie/${id}/credits`);
+  }
 }
+
