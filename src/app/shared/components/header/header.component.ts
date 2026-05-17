@@ -1,8 +1,9 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MovieService } from '../../../../core/services/movie.service';
-import { Movie } from '../../../../core/models/movie.model';
+import { MovieService } from '../../../core/services/movie.service';
+import { Movie } from '../../../core/models/movie.model';
+import { MovieResponse } from '../../../core/models/movie.model';
 
 @Component({
   selector: 'app-header',
@@ -27,16 +28,19 @@ export class HeaderComponent {
       if (query.length > 0) {
         this.isSearching.set(true);
 
+        // Referencia explícita a this para evitar pérdida de contexto dentro del setTimeout
+        const self = this;
+
         // Patrón Debounce: Espera 300ms antes de realizar la petición HTTP
         const timeout = setTimeout(() => {
-          this.movieService.searchMovies(query).subscribe({
-            next: (response) => {
+          self.movieService.searchMovies(query).subscribe({
+            next: (response: MovieResponse) => {
               // Limitamos a los primeros 5 resultados
-              this.searchResults.set(response.results.slice(0, 5));
-              this.isSearching.set(false);
+              self.searchResults.set(response.results.slice(0, 5));
+              self.isSearching.set(false);
             },
             error: () => {
-              this.isSearching.set(false);
+              self.isSearching.set(false);
             }
           });
         }, 300);
