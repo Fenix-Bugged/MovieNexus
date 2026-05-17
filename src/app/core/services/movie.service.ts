@@ -24,5 +24,11 @@ export class MovieService {
   getMovieCredits(id: string | number) {
     return this.http.get<CreditsResponse>(`${this.apiUrl}/movie/${id}/credits`);
   }
+
+  searchMovies(query: string) {
+    return this.http.get<MovieResponse>(`${this.apiUrl}/search/movie`, {
+      params: { query } // Angular convierte esto en ?query=termino automáticamente
+    });
+  }
 }
 
