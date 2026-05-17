@@ -39,6 +39,10 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'favorites',
+    loadComponent: () => import('./features/favorites/favorites').then(m => m.Favorites)
+  },
+  {
     path: '**',
     redirectTo: '',
   },
