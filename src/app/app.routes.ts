@@ -4,7 +4,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./features/home/home.component').then((m) => m.HomeComponent),
+      import('./features/home/home').then((m) => m.Home),
   },
   {
     path: 'movie/:id', // :id es el parámetro dinámico
