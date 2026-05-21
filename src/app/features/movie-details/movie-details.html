@@ -1,4 +1,3 @@
-<!-- El pipe 'async' se suscribe automáticamente a movieData$ -->
 @if (movieData$ | async; as data) {
   <div class="details-container">
     
@@ -39,18 +38,14 @@
       <section class="trailer-section">
         <h2>Tráiler Oficial</h2>
         @defer (on viewport) {
-          <!-- Este componente solo se descarga cuando esta sección entra en pantalla -->
           <app-movie-trailer [movieId]="data.details.id"></app-movie-trailer>
         } @placeholder (minimum 500ms) {
-          <!-- Lo que se muestra ANTES de que se cumpla la condición -->
           <div class="trailer-placeholder">
             <p>Haz scroll para ver el tráiler...</p>
           </div>
         } @loading {
-          <!-- Lo que se muestra DURANTE la descarga del componente -->
           <div class="defer-spinner">Cargando reproductor...</div>
         } @error {
-          <!-- Si la red falla al intentar descargar el componente -->
           <p class="defer-error">Error al cargar el reproductor de video.</p>
         }
       </section>
@@ -75,7 +70,7 @@
         }
       </section>
 
-      <button class="back-button" (click)="goBack()">Volver</button>
+      <button class="back-button" onclick="history.back()">Volver</button>
     </div>
   </div>
 } @else {

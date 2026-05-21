@@ -1,5 +1,4 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { MovieService } from '../../core/services/movie.service';
 import { Movie } from '../../core/models/movie.model';
@@ -17,7 +16,6 @@ import { MovieTrailer } from './components/movie-trailer/movie-trailer';
 })
 export class MovieDetails implements OnInit {
   private movieService = inject(MovieService);
-  private location = inject(Location);
 
   @Input() id!: string;
 
@@ -32,10 +30,6 @@ export class MovieDetails implements OnInit {
         credits: this.movieService.getMovieCredits(this.id)
       });
     }
-  }
-
-  goBack(): void {
-    this.location.back();
   }
 
   getBackdropUrl(path: string | null | undefined): string {

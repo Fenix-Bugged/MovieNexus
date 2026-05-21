@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { MovieResponse, Movie } from '../models/movie.model';
 import { CreditsResponse } from '../models/cast.model'; // Importa el nuevo modelo
@@ -8,17 +8,6 @@ import { CreditsResponse } from '../models/cast.model'; // Importa el nuevo mode
 export class MovieService {
   private http = inject(HttpClient);
   private apiUrl = environment.baseUrl;
-
-  // ─── Estado persistente del Home (singleton) ───────────────────────────────
-  // Al vivir en el servicio, sobreviven la destrucción del componente Home y
-  // evitan que los skeleton loaders aparezcan al volver de una película.
-  trendingMovies = signal<Movie[]>([]);
-  popularMovies  = signal<Movie[]>([]);
-  catalogMovies  = signal<Movie[]>([]);
-  currentPage    = signal<number>(1);
-  isFetchingNextPage = signal<boolean>(false);
-
-  // ─── HTTP Methods ───────────────────────────────────────────────────────────
 
   getTrendingMovies() {
     return this.http.get<MovieResponse>(`${this.apiUrl}/trending/movie/day`);
