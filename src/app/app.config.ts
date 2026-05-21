@@ -10,10 +10,27 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withViewTransitions({
-        onViewTransitionCreated: ({ transition, from }) => {
-          // Si no hay una ruta previa (from es undefined), estamos en la carga inicial de la aplicación
-          // por lo que cancelamos la transición para que se cargue al instante sin animación lenta.
+        onViewTransitionCreated: ({ transition, from, to }) => {
+          // 1. Omitir si es la carga inicial de la aplicación
           if (!from) {
+            transition.skipTransition();
+            return;
+          }
+
+          // Función helper para determinar si un snapshot apunta a detalles de película
+          const isMovieDetails = (snapshot: any): boolean => {
+            let current = snapshot;
+            while (current) {
+              if (current.routeConfig?.path === 'movie/:id') {
+                return true;
+              }
+              current = current.firstChild;
+            }
+            return false;
+          };
+
+          // 2. Omitir la transición de ida (Home -> Detalles)
+          if (isMovieDetails(to)) {
             transition.skipTransition();
           }
         }
