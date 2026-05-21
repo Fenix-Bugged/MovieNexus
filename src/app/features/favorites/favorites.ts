@@ -1,17 +1,25 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { MovieCard } from '../../shared/components/movie-card/movie-card';
+import { SkeletonCard } from '../../shared/components/skeleton-card/skeleton-card';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [CommonModule, MovieCard],
+  imports: [CommonModule, MovieCard, SkeletonCard],
   templateUrl: './favorites.html',
   styleUrl: './favorites.css'
 })
-export class Favorites {
+export class Favorites implements OnInit {
   public favoritesService = inject(FavoritesService);
+  isLoading = signal<boolean>(true);
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.isLoading.set(false);
+    }, 1000);
+  }
 
   get favoriteMovies() {
     return this.favoritesService.favorites();

@@ -7,6 +7,7 @@ import { MovieCard } from '../../shared/components/movie-card/movie-card';
 import { Movie } from '../../core/models/movie.model';
 import { SkeletonHero } from '../../shared/components/skeleton-hero/skeleton-hero';
 import { SkeletonCard } from '../../shared/components/skeleton-card/skeleton-card';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -34,7 +35,7 @@ export class Home implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     // 1. Pedimos las tendencias del día
-    this.movieService.getTrendingMovies().subscribe({
+    this.movieService.getTrendingMovies().pipe(delay(1000)).subscribe({
       next: (data) => {
         if (data.results.length > 0) {
           this.featuredMovie.set(data.results[0]); // Ponemos la #1 como Destacada
@@ -44,7 +45,7 @@ export class Home implements OnInit, AfterViewInit {
     });
 
     // 2. Pedimos las populares (Slider estático inicial)
-    this.movieService.getPopularMovies().subscribe({
+    this.movieService.getPopularMovies().pipe(delay(1000)).subscribe({
       next: (data) => {
         this.popularMovies.set(data.results);
       }
@@ -77,7 +78,7 @@ export class Home implements OnInit, AfterViewInit {
   loadMoreMovies(): void {
     this.isFetchingNextPage.set(true);
 
-    this.movieService.getPopularMovies(this.currentPage()).subscribe({
+    this.movieService.getPopularMovies(this.currentPage()).pipe(delay(1000)).subscribe({
       next: (data) => {
         // Inmutabilidad: Concatenamos los resultados usando el operador spread [...]
         this.catalogMovies.set([...this.catalogMovies(), ...data.results]);
