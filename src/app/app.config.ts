@@ -1,30 +1,17 @@
-import {
-  ApplicationConfig,
-  provideBrowserGlobalErrorListeners,
-} from '@angular/core';
-import { provideRouter, withViewTransitions, withComponentInputBinding } from '@angular/router';
-import {
-  provideClientHydration,
-  withEventReplay,
-} from '@angular/platform-browser';
-import {
-  provideHttpClient,
-  withFetch,
-  withInterceptors,
-} from '@angular/common/http';
-
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter, withViewTransitions, withComponentInputBinding } from '@angular/router'; // Importación requerida
 import { routes } from './app.routes';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideClientHydration } from '@angular/platform-browser';
 import { apiInterceptor } from './core/interceptors/api.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(
-      routes,
-      withViewTransitions(),
-      withComponentInputBinding()
-    ),
-    provideClientHydration(withEventReplay()),
-    provideHttpClient(withFetch(), withInterceptors([apiInterceptor])),
-  ],
+    provideRouter(routes, withViewTransitions(), withComponentInputBinding()), // Activamos las transiciones de vista aquí
+    provideClientHydration(),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([apiInterceptor])
+    )
+  ]
 };
