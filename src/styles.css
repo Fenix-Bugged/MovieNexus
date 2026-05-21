@@ -82,13 +82,23 @@ body {
 }
 
 @keyframes fade-out {
-  from { opacity: 1; }
-  to   { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* ─── Utility: Container ──────────────────────────────── */
@@ -150,6 +160,7 @@ button {
   0% {
     background-position: -1000px 0;
   }
+
   100% {
     background-position: 1000px 0;
   }
@@ -158,13 +169,11 @@ button {
 /* Clase de utilidad reutilizable */
 .skeleton-base {
   background: #2a2a2a;
-  background-image: linear-gradient(
-    to right,
-    #2a2a2a 0%,
-    #3a3a3a 20%,
-    #2a2a2a 40%,
-    #2a2a2a 100%
-  );
+  background-image: linear-gradient(to right,
+      #2a2a2a 0%,
+      #3a3a3a 20%,
+      #2a2a2a 40%,
+      #2a2a2a 100%);
   background-repeat: no-repeat;
   background-size: 1000px 100%;
   animation: shimmer 2s infinite linear forwards;
@@ -177,11 +186,10 @@ button {
 /* Hacemos que todas las transiciones sean un poco más lentas y fluidas para apreciarlas */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 1s;
+  animation-duration: 4s;
 }
 
 ::view-transition-group(*) {
-  animation-duration: 1s;
+  animation-duration: 4s;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
-
