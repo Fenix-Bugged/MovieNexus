@@ -21,15 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
-      withViewTransitions({
-        onViewTransitionCreated: ({ transition, from }) => {
-          // Si no hay una ruta previa (from es undefined), estamos en la carga inicial de la aplicación
-          // por lo que cancelamos la transición para que se cargue al instante sin animación lenta.
-          if (!from) {
-            transition.skipTransition();
-          }
-        }
-      }),
+      withViewTransitions(),
       withComponentInputBinding()
     ),
     provideClientHydration(withEventReplay()),
