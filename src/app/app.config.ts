@@ -19,7 +19,19 @@ import { apiInterceptor } from './core/interceptors/api.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
+    provideRouter(
+      routes,
+      withViewTransitions({
+        onViewTransitionCreated: ({ transition, from }) => {
+          // Si no hay una ruta previa (from es undefined), estamos en la carga inicial de la aplicación
+          // por lo que cancelamos la transición para que se cargue al instante sin animación lenta.
+          if (!from) {
+            transition.skipTransition();
+          }
+        }
+      }),
+      withComponentInputBinding()
+    ),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(), withInterceptors([apiInterceptor])),
   ],
