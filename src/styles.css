@@ -169,3 +169,19 @@ button {
   background-size: 1000px 100%;
   animation: shimmer 2s infinite linear forwards;
 }
+
+/* ==========================================
+   PERSONALIZACIÓN DE VIEW TRANSITIONS API
+   ========================================== */
+
+/* Hacemos que todas las transiciones sean un poco más lentas y fluidas para apreciarlas */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 1s;
+}
+
+::view-transition-group(*) {
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
