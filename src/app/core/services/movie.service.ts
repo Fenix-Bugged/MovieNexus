@@ -15,6 +15,10 @@ export class MovieService {
   public catalogMoviesCache = signal<Movie[]>([]);
   public currentPageCache = signal<number>(1);
 
+  // ID de la película activa para la View Transition (evita duplicados de view-transition-name)
+  public activeTransitionMovieId = signal<number | null>(null);
+  public activeTransitionContext = signal<string>('default');
+
   getTrendingMovies() {
     return this.http.get<MovieResponse>(`${this.apiUrl}/trending/movie/day`);
   }

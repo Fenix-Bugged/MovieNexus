@@ -1,5 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { MovieService } from '../../core/services/movie.service';
 import { Movie } from '../../core/models/movie.model';
 import { CastCard } from '../../shared/components/cast-card/cast-card.component';
@@ -10,7 +11,7 @@ import { MovieTrailer } from './components/movie-trailer/movie-trailer';
 @Component({
   selector: 'app-movie-details',
   standalone: true,
-  imports: [CommonModule, CastCard, MovieTrailer], // Importación de CastCard y MovieTrailer
+  imports: [CommonModule, CastCard, MovieTrailer, RouterLink], // Importación de CastCard, MovieTrailer y RouterLink
   templateUrl: './movie-details.html',
   styleUrl: './movie-details.css'
 })
@@ -24,6 +25,9 @@ export class MovieDetails implements OnInit {
 
   ngOnInit(): void {
     if (this.id) {
+      // Registramos el ID activo para la transición de retorno al Home
+      this.movieService.activeTransitionMovieId.set(Number(this.id));
+
       // forkJoin dispara ambas peticiones al mismo tiempo y crea un objeto con los dos resultados
       this.movieData$ = forkJoin({
         details: this.movieService.getMovieById(this.id),

@@ -183,13 +183,13 @@ button {
    PERSONALIZACIÓN DE VIEW TRANSITIONS API
    ========================================== */
 
-/* Hacemos que todas las transiciones sean un poco más lentas y fluidas para apreciarlas */
+/* Transiciones lentas y cinematográficas para apreciar el morphing */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 4s;
 }
 
 ::view-transition-group(*) {
-  animation-duration: 4s;
+  animation-duration: 5s;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }

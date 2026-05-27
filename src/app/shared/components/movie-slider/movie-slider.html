@@ -5,7 +5,7 @@
   <div class="slider-track">
     @if (movies.length > 0) {
       @for (movie of movies; track movie.id) {
-        <app-movie-card [movie]="movie"></app-movie-card>
+        <app-movie-card [movie]="movie" [context]="context"></app-movie-card>
       }
     } @else {
       <!-- Mostramos 5 esqueletos mientras carga la API -->

@@ -1,12 +1,12 @@
-<div class="movie-card" [routerLink]="['/movie', movie.id]">
+<div class="movie-card" [routerLink]="['/movie', movie.id]" (click)="onCardClick()">
   <div class="card-image-container">
-    <!-- Añadimos [style.view-transition-name] dinámico a la imagen del póster -->
+    <!-- view-transition-name condicional: solo se aplica a la tarjeta activa -->
     <img
       [src]="posterUrl"
       [alt]="movie.title"
       class="card-image"
       loading="lazy"
-      [style.view-transition-name]="'movie-poster-' + movie.id"
+      [style.view-transition-name]="transitionName"
     />
   </div>
 

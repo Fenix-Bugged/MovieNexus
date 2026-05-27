@@ -12,13 +12,13 @@ export const appConfig: ApplicationConfig = {
       routes,
       withViewTransitions({
         onViewTransitionCreated: ({ transition, from, to }) => {
-          // 1. Omitir si es la carga inicial de la aplicación
+          // 1. Omitir la carga inicial de la aplicación
           if (!from) {
             transition.skipTransition();
             return;
           }
 
-          // Función helper para determinar si un snapshot apunta a detalles de película
+          // Helper para detectar si un snapshot apunta a detalles de película
           const isMovieDetails = (snapshot: any): boolean => {
             let current = snapshot;
             while (current) {
@@ -30,8 +30,9 @@ export const appConfig: ApplicationConfig = {
             return false;
           };
 
-          // 2. Omitir la transición de ida (Home -> Detalles)
-          if (isMovieDetails(to)) {
+          // SOLO permitir la transición al SALIR de detalles (botón Volver)
+          // Omitir en TODAS las demás navegaciones
+          if (!isMovieDetails(from)) {
             transition.skipTransition();
           }
         }
