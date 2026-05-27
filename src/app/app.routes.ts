@@ -43,7 +43,7 @@ export const routes: Routes = [
     loadComponent: () => import('./features/favorites/favorites').then(m => m.Favorites)
   },
   {
-    path: '**',
-    redirectTo: '',
-  },
+    path: '**', // Atrapa cualquier ruta inexistente
+    loadComponent: () => import('./features/not-found/not-found').then(m => m.NotFound)
+  }
 ];

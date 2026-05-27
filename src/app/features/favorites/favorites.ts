@@ -2,12 +2,12 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { MovieCard } from '../../shared/components/movie-card/movie-card';
-import { SkeletonCard } from '../../shared/components/skeleton-card/skeleton-card';
+import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [CommonModule, MovieCard, SkeletonCard],
+  imports: [CommonModule, MovieCard, EmptyStateComponent],
   templateUrl: './favorites.html',
   styleUrl: './favorites.css'
 })
@@ -22,6 +22,6 @@ export class Favorites implements OnInit {
   }
 
   get favoriteMovies() {
-    return this.favoritesService.favorites();
+    return this.favoritesService.favorites;
   }
 }

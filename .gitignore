@@ -44,3 +44,7 @@ __screenshots__/
 Thumbs.db
 .vercel
 .env*.local
+
+/src/environments/environment.ts
+/src/environments/environment.development.ts
+
