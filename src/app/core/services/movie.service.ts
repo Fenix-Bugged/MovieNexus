@@ -2,31 +2,23 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { MovieResponse, Movie } from '../models/movie.model';
-import { CreditsResponse } from '../models/cast.model'; // Importa el nuevo modelo
+import { CreditsResponse } from '../models/cast.model';
 
 @Injectable({ providedIn: 'root' })
 export class MovieService {
   private http = inject(HttpClient);
   private apiUrl = environment.baseUrl;
 
-  // ─── Estado persistente del Home (singleton) ───────────────────────────────
-  // Al vivir en el servicio, sobreviven la destrucción del componente Home y
-  // evitan que los skeleton loaders aparezcan al volver de una película.
-  trendingMovies = signal<Movie[]>([]);
-  popularMovies  = signal<Movie[]>([]);
-  catalogMovies  = signal<Movie[]>([]);
-  currentPage    = signal<number>(1);
-  isFetchingNextPage = signal<boolean>(false);
-
-  // ─── HTTP Methods ───────────────────────────────────────────────────────────
+  // CACHE DE SIGNALS PERSISTENTES (Evita la renderización de Skeletons al volver a la Home)
+  public trendingMoviesCache = signal<Movie[]>([]);
+  public popularMoviesCache = signal<Movie[]>([]);
+  public catalogMoviesCache = signal<Movie[]>([]);
+  public currentPageCache = signal<number>(1);
 
   getTrendingMovies() {
     return this.http.get<MovieResponse>(`${this.apiUrl}/trending/movie/day`);
   }
 
-  /**
-   * Obtiene las películas populares con soporte para paginación.
-   */
   getPopularMovies(page: number = 1) {
     return this.http.get<MovieResponse>(`${this.apiUrl}/movie/popular`, {
       params: { page: page.toString() }
@@ -41,19 +33,15 @@ export class MovieService {
     return this.http.get<CreditsResponse>(`${this.apiUrl}/movie/${id}/credits`);
   }
 
-  searchMovies(query: string) {
-    return this.http.get<MovieResponse>(`${this.apiUrl}/search/movie`, {
-      params: { query } // Angular convierte esto en ?query=termino automáticamente
-    });
-  }
-
-  /**
-   * Obtiene los videos (tráilers, teasers, etc.) de una película.
-   * @param id ID de la película en TMDB
-   */
   getMovieVideos(id: string | number) {
     return this.http.get<{ results: Array<{key: string; site: string; type: string; name: string}> }>(
       `${this.apiUrl}/movie/${id}/videos`
     );
+  }
+
+  searchMovies(query: string) {
+    return this.http.get<MovieResponse>(`${this.apiUrl}/search/movie`, {
+      params: { query }
+    });
   }
 }

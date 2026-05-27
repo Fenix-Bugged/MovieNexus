@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, AfterViewInit, ElementRef, ViewChild, PLATFORM_ID } from '@angular/core';
+import { Component, inject, OnInit, signal, AfterViewInit, ElementRef, ViewChild, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MovieService } from '../../core/services/movie.service';
 import { HeroComponent as Hero } from '../../shared/components/hero/hero';
@@ -6,7 +6,7 @@ import { MovieSlider } from '../../shared/components/movie-slider/movie-slider';
 import { MovieCard } from '../../shared/components/movie-card/movie-card';
 import { SkeletonHero } from '../../shared/components/skeleton-hero/skeleton-hero';
 import { SkeletonCard } from '../../shared/components/skeleton-card/skeleton-card';
-import { delay } from 'rxjs';
+import { Movie } from '../../core/models/movie.model';
 
 @Component({
   selector: 'app-home',
@@ -16,50 +16,52 @@ import { delay } from 'rxjs';
   styleUrl: './home.css'
 })
 export class Home implements OnInit, AfterViewInit {
-  // Las signals viven en el servicio (singleton) para persistir entre navegaciones
-  movieService = inject(MovieService);
+  private movieService = inject(MovieService);
   private platformId = inject(PLATFORM_ID);
 
   @ViewChild('infiniteAnchor') infiniteAnchor!: ElementRef;
 
-  // Accesos directos a las signals del servicio (para usarlos en el template)
-  trendingMovies    = this.movieService.trendingMovies;
-  popularMovies     = this.movieService.popularMovies;
-  catalogMovies     = this.movieService.catalogMovies;
-  isFetchingNextPage = this.movieService.isFetchingNextPage;
+  // Vinculamos directamente las propiedades del componente a la caché del servicio
+  featuredMovie = signal<Movie | null>(null);
+  
+  // Usamos getters o asignación de referencia para usar la caché compartida
+  get trendingMovies() { return this.movieService.trendingMoviesCache; }
+  get popularMovies() { return this.movieService.popularMoviesCache; }
+  get catalogMovies() { return this.movieService.catalogMoviesCache; }
+  get currentPage() { return this.movieService.currentPageCache; }
+  
+  isFetchingNextPage = signal<boolean>(false);
 
   ngOnInit(): void {
-    // Solo pedimos datos si el caché del servicio está vacío.
-    // Si el usuario vuelve atrás, los datos ya están cargados → sin skeleton y transición perfecta.
-
+    // Si la caché está vacía, realizamos las peticiones iniciales
     if (this.trendingMovies().length === 0) {
-      // 1. Pedimos las tendencias del día (con delay para apreciar el esqueleto al inicio)
-      this.movieService.getTrendingMovies().pipe(delay(1000)).subscribe({
+      this.movieService.getTrendingMovies().subscribe({
         next: (data) => {
           if (data.results.length > 0) {
-            this.movieService.trendingMovies.set(data.results);
+            this.featuredMovie.set(data.results[0]);
+            this.movieService.trendingMoviesCache.set(data.results);
           }
         }
       });
+    } else {
+      // Si ya hay datos en caché, asignamos la película destacada inmediatamente para evitar parpadeos
+      this.featuredMovie.set(this.trendingMovies()[0]);
     }
 
     if (this.popularMovies().length === 0) {
-      // 2. Pedimos las populares (Slider estático inicial)
-      this.movieService.getPopularMovies().pipe(delay(1000)).subscribe({
+      this.movieService.getPopularMovies().subscribe({
         next: (data) => {
-          this.movieService.popularMovies.set(data.results);
+          this.movieService.popularMoviesCache.set(data.results);
         }
       });
     }
 
     if (this.catalogMovies().length === 0) {
-      // 3. Cargamos la primera página del catálogo de Scroll Infinito
       this.loadMoreMovies();
     }
   }
 
   ngAfterViewInit(): void {
-    // Solo configuramos el observador en el navegador (SSR Safety)
     if (isPlatformBrowser(this.platformId)) {
       this.initInfiniteScroll();
     }
@@ -67,30 +69,28 @@ export class Home implements OnInit, AfterViewInit {
 
   private initInfiniteScroll(): void {
     const observer = new IntersectionObserver((entries) => {
-      // Si el ancla entra en el campo de visión y no estamos cargando otra página activa...
       if (entries[0].isIntersecting && !this.isFetchingNextPage()) {
         this.loadMoreMovies();
       }
     }, {
-      rootMargin: '200px' // rootMargin permite cargar 200px antes de llegar físicamente al final
+      rootMargin: '200px'
     });
 
     observer.observe(this.infiniteAnchor.nativeElement);
   }
 
   loadMoreMovies(): void {
-    this.movieService.isFetchingNextPage.set(true);
+    this.isFetchingNextPage.set(true);
 
-    this.movieService.getPopularMovies(this.movieService.currentPage()).pipe(delay(1000)).subscribe({
+    this.movieService.getPopularMovies(this.currentPage()).subscribe({
       next: (data) => {
-        // Inmutabilidad: concatenamos los resultados usando el operador spread [...]
-        this.movieService.catalogMovies.set([...this.catalogMovies(), ...data.results]);
-        // Avanzamos de página de forma reactiva
-        this.movieService.currentPage.update(p => p + 1);
-        this.movieService.isFetchingNextPage.set(false);
+        // Concatenamos en la caché del servicio
+        this.movieService.catalogMoviesCache.set([...this.catalogMovies(), ...data.results]);
+        this.movieService.currentPageCache.update(p => p + 1);
+        this.isFetchingNextPage.set(false);
       },
       error: () => {
-        this.movieService.isFetchingNextPage.set(false);
+        this.isFetchingNextPage.set(false);
       }
     });
   }
