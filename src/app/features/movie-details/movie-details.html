@@ -70,6 +70,21 @@
         }
       </section>
 
+      <!-- CARGA DIFERIDA: Sección de Comentarios (on viewport) -->
+      <section class="comments-container" style="max-width: 800px; margin: 3rem auto 0; padding: 0 1rem;">
+        @defer (on viewport) {
+          <!-- Se carga automáticamente al entrar en el viewport -->
+          <app-movie-comments [movieId]="data.details.id"></app-movie-comments>
+        } @placeholder {
+          <!-- Contenido alternativo antes de hacer scroll -->
+          <div class="comments-loading-placeholder" style="text-align: center; padding: 2rem; border: 1px dashed #333; border-radius: 8px; color: #777;">
+            <p>Scroll hacia abajo para ver y dejar comentarios... 💬</p>
+          </div>
+        } @loading {
+          <div style="text-align: center; padding: 2rem; color: #888;">Cargando sección de comentarios...</div>
+        }
+      </section>
+
       <button class="back-button" routerLink="/">Volver</button>
     </div>
   </div>

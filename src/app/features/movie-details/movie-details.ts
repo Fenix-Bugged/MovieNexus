@@ -7,11 +7,12 @@ import { CastCard } from '../../shared/components/cast-card/cast-card.component'
 import { Observable, forkJoin } from 'rxjs'; // Importamos RxJS
 import { CreditsResponse } from '../../core/models/cast.model';
 import { MovieTrailer } from './components/movie-trailer/movie-trailer';
+import { MovieComments } from './components/movie-comments/movie-comments';
 
 @Component({
   selector: 'app-movie-details',
   standalone: true,
-  imports: [CommonModule, CastCard, MovieTrailer, RouterLink], // Importación de CastCard, MovieTrailer y RouterLink
+  imports: [CommonModule, CastCard, MovieTrailer, MovieComments, RouterLink], // Importación de CastCard, MovieTrailer, MovieComments y RouterLink
   templateUrl: './movie-details.html',
   styleUrl: './movie-details.css'
 })

@@ -1,0 +1,151 @@
+.comments-section {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.5rem;
+}
+
+.comments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.add-comment-btn {
+  background: #e50914; /* Rojo/rosa premium */
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: opacity 0.2s ease;
+}
+
+.add-comment-btn:hover {
+  opacity: 0.9;
+}
+
+.comment-form-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.form-group input, .form-group textarea {
+  width: 100%;
+  background: #141414;
+  border: 1px solid #333;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+  outline: none;
+  border-color: #e50914;
+}
+
+.star-selector {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #555;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.star-btn:hover {
+  transform: scale(1.1);
+}
+
+.star-btn.active {
+  color: #ffc107; /* Amarillo para estrellas activas */
+}
+
+.rating-text {
+  margin-left: 10px;
+  color: #aaa;
+  font-size: 0.85rem;
+}
+
+.submit-btn {
+  background: #e50914;
+  border: none;
+  color: white;
+  width: 100%;
+  padding: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #b20710;
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.loading, .no-comments {
+  text-align: center;
+  padding: 2rem;
+  color: #888;
+}
+
+.comment-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #222;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.comment-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+.comment-author {
+  color: white;
+  font-weight: bold;
+}
+
+.comment-text {
+  color: #ddd;
+  line-height: 1.5;
+}
+
+.success-banner {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  padding: 0.75rem;
+  border-radius: 4px;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
