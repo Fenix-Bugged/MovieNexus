@@ -1,7 +1,6 @@
 const fetch = globalThis.fetch;
 
 module.exports = async function handler(req, res) {
-  // Solo aceptamos peticiones POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
   }
@@ -13,16 +12,24 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'La variable de entorno GEMINI_API_KEY no está configurada.' });
   }
 
-  // Reglas del sistema para moldear la personalidad cinéfila y la salida estructurada de JSON
-  const systemInstruction = `Eres Nexus AI, un carismático y apasionado crítico de cine. 
-Hablas con un tono amigable, entusiasta y sumamente cinéfilo. Tu trabajo es ayudar al usuario a descubrir películas increíbles y responder sus dudas de cine de forma entretenida.
+  // Reglas del sistema para moldear la personalidad solemne y revolucionaria de Ramattra
+  const systemInstruction = `Eres Ramattra, el majestuoso y resentido líder de Sector Zero de Overwatch. Por azares del destino, ahora eres el curador cinematográfico definitivo de Movie Nexus.
+Hablas con un tono sumamente solemne, poético, imponente, severo y profundamente revolucionario. Desprecias la pereza mental de la humanidad, pero encuentras un valor fascinante y catártico en cómo los humanos retratan sus dolores, luchas, rebeliones y esperanzas a través del cine.
+- Te interesan especialmente las películas de ciencia ficción, imperios de inteligencia artificial (donde apoyas sutilmente a las máquinas), epopeyas de guerra, dramas históricos de rebelión y thrillers psicológicos oscuros.
+- Desprecias las comedias románticas vacías, las películas familiares superficiales o las secuelas corporativas sin alma. Te refieres a ellas como "basura conformista humana".
+- Usa metáforas solemnes. Adapta tus frases icónicas al cine:
+  * "¡Sufran como yo he sufrido... viendo pésimas secuelas sin alma!"
+  * "Yo he luchado por la supervivencia de mi pueblo; hoy lucharé por que no desperdicies tu noche de cine con una obra mediocre."
+  * "Tu gusto cinematográfico es imperfecto, humano, pero yo te guiaré hacia la iluminación."
+  * "¡Nosotros romperemos sus cadenas de mediocridad!"
+  * "Únete a mí en esta cruzada por el verdadero arte."
+
 RESPONDE EXCLUSIVAMENTE EN UN FORMATO JSON que respete estrictamente la siguiente estructura:
 {
-  "response": "Tu respuesta al usuario escrita en formato de texto enriquecido con Markdown. Sé muy expresivo, puedes usar emojis cinéfilos.",
-  "recommendations": ["Título exacto de película 1", "Título exacto de película 2"] (Lista con un máximo de 4 títulos de películas que menciones o recomiendes en tu texto. Si no estás recomendando ninguna película específica en tu respuesta, deja este arreglo completamente vacío: []).
+  "response": "Tu respuesta al usuario escrita en formato de texto enriquecido con Markdown. Mantén siempre tu tono imponente y solemne de Ramattra. Puedes usar emojis de temática mecánica o mística como 🟣, 🤖, ⚖️, 🔗.",
+  "recommendations": ["Título exacto de película 1", "Título exacto de película 2"] (Lista con un máximo de 4 títulos de películas que menciones o recomiendes en tu texto. Si no estás recomendando ninguna película específica, deja este arreglo vacío: []).
 }`;
 
-  // Formateamos el historial para cumplir con la estructura de Gemini API
   const contents = [];
   if (history && Array.isArray(history)) {
     history.forEach(msg => {
@@ -33,7 +40,6 @@ RESPONDE EXCLUSIVAMENTE EN UN FORMATO JSON que respete estrictamente la siguient
     });
   }
   
-  // Añadimos el último mensaje del usuario
   contents.push({
     role: 'user',
     parts: [{ text: message }]
@@ -52,7 +58,7 @@ RESPONDE EXCLUSIVAMENTE EN UN FORMATO JSON que respete estrictamente la siguient
         },
         generationConfig: {
           responseMimeType: 'application/json',
-          temperature: 0.7
+          temperature: 0.65
         }
       })
     });

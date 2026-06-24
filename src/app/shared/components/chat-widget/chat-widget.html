@@ -3,47 +3,52 @@
   class="chat-trigger-btn" 
   [class.active]="isWidgetOpen()" 
   (click)="toggleWidget()"
-  aria-label="Abrir asistente de cine"
+  aria-label="Contactar a Ramattra"
 >
   @if (isWidgetOpen()) {
     <span class="close-icon">✕</span>
   } @else {
-    <span class="chat-icon">🍿</span>
+    <span class="chat-icon">🟣</span>
   }
 </button>
 
-<!-- Caja de Chat Flotante Estilo Glassmorphism -->
+<!-- Caja de Chat Flotante Estilo Glassmorphism Púrpura -->
 @if (isWidgetOpen()) {
   <div class="chat-box-container animate-fade-in">
     <!-- Encabezado -->
     <header class="chat-header">
       <div class="header-info">
-        <span class="ai-avatar">🤖</span>
+        <img 
+          src="assets/images/Icon-Ramattra.webp" 
+          alt="Ramattra" 
+          class="ai-avatar-img"
+          onerror="this.src='https://i.imgur.com/kSOfbT3.png'"
+        />
         <div>
-          <h3>Nexus AI</h3>
-          <span class="status-badge"><span class="dot"></span>Cinéfilo Activo</span>
+          <h3>Ramattra AI</h3>
+          <span class="status-badge"><span class="dot"></span>Santuario Ómnico Activo</span>
         </div>
       </div>
-      <button class="clear-btn" (click)="clearChat()" title="Limpiar conversación">🧹</button>
+      <button class="clear-btn" (click)="clearChat()" title="Reiniciar sistema">🧹</button>
     </header>
 
     <!-- Historial de Conversación -->
     <div class="chat-messages-track" #scrollContainer>
       @if (geminiService.chatHistory().length === 0) {
         <div class="welcome-chat-state">
-          <span class="welcome-icon">🎬</span>
-          <h4>¡Hola! Soy tu guía cinéfilo</h4>
-          <p>Pregúntame sobre cualquier género, pídele clásicos o recomendaciones a la carta. ¿De qué tienes ganas hoy?</p>
+          <span class="welcome-icon">⚖️</span>
+          <h4>He luchado por la supervivencia...</h4>
+          <p>La humanidad desperdicia su existencia en la distracción. Sin embargo, en sus proyecciones de luz, hay destellos de grandeza. Dime humano, ¿qué verdad deseas buscar hoy?</p>
           
           <div class="preset-suggestions">
-            <button (click)="sendPresetMessage('Recomiéndame una película espacial épica de Ciencia Ficción 🚀')">
-              Ciencia Ficción 🚀
+            <button (click)="sendPresetMessage('Háblame de películas sobre Inteligencia Artificial o rebelión cibernética 🤖')">
+              Rebeliones Máquina 🤖
             </button>
-            <button (click)="sendPresetMessage('¿Cuáles son los mejores clásicos de Terror que debo ver? 🍿')">
-              Clásicos de Terror 🍿
+            <button (click)="sendPresetMessage('Recomiéndame una epopeya bélica o histórica de resistencia y supervivencia 🛡️')">
+              Epopeyas de Supervivencia 🛡️
             </button>
-            <button (click)="sendPresetMessage('Recomiéndame una comedia romántica ideal para el fin de semana 💖')">
-              Comedia Romántica 💖
+            <button (click)="sendPresetMessage('¿Qué películas de Thriller psicológico u obras maestras oscuras respetas? 🧠')">
+              Obras Maestras Oscuras 🧠
             </button>
           </div>
         </div>
@@ -55,10 +60,10 @@
             <p>{{ message.text }}</p>
           </div>
           
-          <!-- Si la IA recomendó películas reales de TMDB, pintamos el carrusel horizontal interactivo -->
+          <!-- Carrusel de recomendaciones TMDB -->
           @if (message.sender === 'ai' && message.recommendedMovies && message.recommendedMovies.length > 0) {
             <div class="recommendations-carousel-container">
-              <span class="carousel-title">Películas Recomendadas:</span>
+              <span class="carousel-title">Obras autorizadas por Ramattra:</span>
               <div class="carousel-track">
                 @for (movie of message.recommendedMovies; track movie.id) {
                   <div class="carousel-card-wrapper">
@@ -71,7 +76,7 @@
         </div>
       }
 
-      <!-- Indicador de Espera ("IA escribiendo...") -->
+      <!-- Indicador de Espera (Omnic Processing...) -->
       @if (geminiService.isWaitingResponse()) {
         <div class="message-bubble-wrapper">
           <div class="message-bubble waiting">
@@ -90,7 +95,7 @@
         [value]="userInput()"
         (input)="userInput.set($any($event.target).value)"
         (keyup.enter)="onSendMessage()"
-        placeholder="Escribe un mensaje..."
+        placeholder="Háblame con respeto..."
         [disabled]="geminiService.isWaitingResponse()"
       />
       <button 
