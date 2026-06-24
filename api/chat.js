@@ -39,7 +39,7 @@ RESPONDE EXCLUSIVAMENTE EN UN FORMATO JSON que respete estrictamente la siguient
     parts: [{ text: message }]
   });
 
-  const apiURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash:generateContent?key=${apiKey}`;
+  const apiURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
   try {
     const response = await fetch(apiURL, {
