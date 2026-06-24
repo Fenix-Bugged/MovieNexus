@@ -48,3 +48,5 @@ Thumbs.db
 /src/environments/environment.ts
 /src/environments/environment.development.ts
 
+# Gemini API Keys
+/.env

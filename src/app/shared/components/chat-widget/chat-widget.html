@@ -1,0 +1,104 @@
+<!-- Botón Flotante del Chat -->
+<button 
+  class="chat-trigger-btn" 
+  [class.active]="isWidgetOpen()" 
+  (click)="toggleWidget()"
+  aria-label="Abrir asistente de cine"
+>
+  @if (isWidgetOpen()) {
+    <span class="close-icon">✕</span>
+  } @else {
+    <span class="chat-icon">🍿</span>
+  }
+</button>
+
+<!-- Caja de Chat Flotante Estilo Glassmorphism -->
+@if (isWidgetOpen()) {
+  <div class="chat-box-container animate-fade-in">
+    <!-- Encabezado -->
+    <header class="chat-header">
+      <div class="header-info">
+        <span class="ai-avatar">🤖</span>
+        <div>
+          <h3>Nexus AI</h3>
+          <span class="status-badge"><span class="dot"></span>Cinéfilo Activo</span>
+        </div>
+      </div>
+      <button class="clear-btn" (click)="clearChat()" title="Limpiar conversación">🧹</button>
+    </header>
+
+    <!-- Historial de Conversación -->
+    <div class="chat-messages-track" #scrollContainer>
+      @if (geminiService.chatHistory().length === 0) {
+        <div class="welcome-chat-state">
+          <span class="welcome-icon">🎬</span>
+          <h4>¡Hola! Soy tu guía cinéfilo</h4>
+          <p>Pregúntame sobre cualquier género, pídele clásicos o recomendaciones a la carta. ¿De qué tienes ganas hoy?</p>
+          
+          <div class="preset-suggestions">
+            <button (click)="sendPresetMessage('Recomiéndame una película espacial épica de Ciencia Ficción 🚀')">
+              Ciencia Ficción 🚀
+            </button>
+            <button (click)="sendPresetMessage('¿Cuáles son los mejores clásicos de Terror que debo ver? 🍿')">
+              Clásicos de Terror 🍿
+            </button>
+            <button (click)="sendPresetMessage('Recomiéndame una comedia romántica ideal para el fin de semana 💖')">
+              Comedia Romántica 💖
+            </button>
+          </div>
+        </div>
+      }
+
+      @for (message of geminiService.chatHistory(); track $index) {
+        <div class="message-bubble-wrapper" [class.user]="message.sender === 'user'">
+          <div class="message-bubble">
+            <p>{{ message.text }}</p>
+          </div>
+          
+          <!-- Si la IA recomendó películas reales de TMDB, pintamos el carrusel horizontal interactivo -->
+          @if (message.sender === 'ai' && message.recommendedMovies && message.recommendedMovies.length > 0) {
+            <div class="recommendations-carousel-container">
+              <span class="carousel-title">Películas Recomendadas:</span>
+              <div class="carousel-track">
+                @for (movie of message.recommendedMovies; track movie.id) {
+                  <div class="carousel-card-wrapper">
+                    <app-movie-card [movie]="movie"></app-movie-card>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Indicador de Espera ("IA escribiendo...") -->
+      @if (geminiService.isWaitingResponse()) {
+        <div class="message-bubble-wrapper">
+          <div class="message-bubble waiting">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Caja de Entrada -->
+    <footer class="chat-input-bar">
+      <input 
+        type="text" 
+        [value]="userInput()"
+        (input)="userInput.set($any($event.target).value)"
+        (keyup.enter)="onSendMessage()"
+        placeholder="Escribe un mensaje..."
+        [disabled]="geminiService.isWaitingResponse()"
+      />
+      <button 
+        (click)="onSendMessage()" 
+        [disabled]="!userInput().trim() || geminiService.isWaitingResponse()"
+      >
+        <span>➔</span>
+      </button>
+    </footer>
+  </div>
+}
