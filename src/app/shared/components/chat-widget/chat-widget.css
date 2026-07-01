@@ -372,3 +372,51 @@
 .animate-fade-in {
   animation: chat-fade-in 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Estilos de Botón de Micrófono */
+.mic-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+}
+
+.mic-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.05);
+}
+
+/* Estado Activo: Grabando/Escuchando */
+.mic-btn.recording {
+  background: rgba(239, 68, 68, 0.2); /* Rojo suave de fondo */
+  border-color: #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.45);
+}
+
+.animate-pulse-red {
+  animation: pulse-red-mic 1.4s infinite ease-in-out;
+}
+
+@keyframes pulse-red-mic {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+

@@ -1,4 +1,4 @@
-@if (movieData$ | async; as data) {
+@if (movieData$(); as data) {
   <div class="details-container">
     
     <!-- Imagen de fondo (Backdrop) -->
@@ -33,6 +33,57 @@
         <h2>Sinopsis</h2>
         <p class="overview">{{ data.details.overview }}</p>
       </section>
+
+      <!-- Sección de Proveedores de Streaming (Watch Providers) -->
+      @if (localProviders()) {
+        <section class="streaming-section animate-fade-in">
+          <h3 class="section-title">¿Dónde ver esta película? 🎬</h3>
+          
+          <div class="providers-container">
+            <!-- 1. En Suscripción (Flatrate) -->
+            @if (localProviders()?.flatrate) {
+              <div class="provider-group">
+                <span class="group-label">Streaming Incluido</span>
+                <div class="provider-logos">
+                  @for (provider of localProviders()?.flatrate; track provider.provider_id) {
+                    <div class="logo-wrapper" [title]="provider.provider_name">
+                      <img [src]="'https://image.tmdb.org/t/p/original' + provider.logo_path" [alt]="provider.provider_name" />
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- 2. En Renta -->
+            @if (localProviders()?.rent) {
+              <div class="provider-group">
+                <span class="group-label">Renta</span>
+                <div class="provider-logos">
+                  @for (provider of localProviders()?.rent; track provider.provider_id) {
+                    <div class="logo-wrapper" [title]="provider.provider_name">
+                      <img [src]="'https://image.tmdb.org/t/p/original' + provider.logo_path" [alt]="provider.provider_name" />
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- 3. En Compra -->
+            @if (localProviders()?.buy) {
+              <div class="provider-group">
+                <span class="group-label">Compra</span>
+                <div class="provider-logos">
+                  @for (provider of localProviders()?.buy; track provider.provider_id) {
+                    <div class="logo-wrapper" [title]="provider.provider_name">
+                      <img [src]="'https://image.tmdb.org/t/p/original' + provider.logo_path" [alt]="provider.provider_name" />
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      }
 
       <!-- CARGA DIFERIDA: El Tráiler (on viewport) -->
       <section class="trailer-section">

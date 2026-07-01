@@ -88,14 +88,30 @@
       }
     </div>
 
-    <!-- Caja de Entrada -->
+    <!-- Caja de Entrada Modificada -->
     <footer class="chat-input-bar">
+      <!-- Botón de Micrófono -->
+      @if (recognitionAvailable) {
+        <button 
+          class="mic-btn" 
+          [class.recording]="isRecording()" 
+          (click)="toggleRecording()"
+          [title]="isRecording() ? 'Escuchando... clica para detener' : 'Dictar mensaje por voz'"
+        >
+          @if (isRecording()) {
+            <span class="mic-icon animate-pulse-red">🎤</span>
+          } @else {
+            <span class="mic-icon">🎤</span>
+          }
+        </button>
+      }
+
       <input 
         type="text" 
         [value]="userInput()"
         (input)="userInput.set($any($event.target).value)"
         (keyup.enter)="onSendMessage()"
-        placeholder="Háblame con respeto..."
+        placeholder="Escribe o dicta tu pregunta..."
         [disabled]="geminiService.isWaitingResponse()"
       />
       <button 

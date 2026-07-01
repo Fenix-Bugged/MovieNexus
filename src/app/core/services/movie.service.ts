@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { MovieResponse, Movie } from '../models/movie.model';
+import { MovieResponse, Movie, WatchProvidersResponse } from '../models/movie.model';
 import { CreditsResponse } from '../models/cast.model';
 
 @Injectable({ providedIn: 'root' })
@@ -47,5 +48,12 @@ export class MovieService {
     return this.http.get<MovieResponse>(`${this.apiUrl}/search/movie`, {
       params: { query }
     });
+  }
+
+  /**
+   * Obtiene las plataformas de streaming, renta y compra disponibles para una película.
+   */
+  getWatchProviders(movieId: number): Observable<WatchProvidersResponse> {
+    return this.http.get<WatchProvidersResponse>(`${this.apiUrl}/movie/${movieId}/watch/providers`);
   }
 }
